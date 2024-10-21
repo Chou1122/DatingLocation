@@ -81,7 +81,6 @@ const MapComponent = () => {
     };
   }, [category, map]);
 
-  // Hàm xử lý click vào một địa điểm
   const handlePlaceClick = (lat, lon) => {
     if (map) {
       setHighlightedLocation([lat, lon]);
@@ -89,7 +88,6 @@ const MapComponent = () => {
     }
   };
 
-  // Hàm tắt trạng thái tìm kiếm
   const handleStopSearching = () => {
     setPlaces([]);
     setIsSearching(false);
@@ -99,7 +97,6 @@ const MapComponent = () => {
     }
   };
 
-  // Vẽ vòng tròn quanh vị trí được highlight
   useEffect(() => {
     if (highlightedLocation && map) {
       const [lat, lon] = highlightedLocation;
@@ -120,14 +117,13 @@ const MapComponent = () => {
     }
   }, [highlightedLocation, map]);
 
-  // Hàm lấy vị trí hiện tại của người dùng
   const handleFocusCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           if (map) {
-            map.flyTo([latitude, longitude], 18); // Di chuyển đến vị trí hiện tại
+            map.flyTo([latitude, longitude], 18); 
           } else {
             console.error("Map instance is not available.");
           }
@@ -164,7 +160,7 @@ const MapComponent = () => {
             <button onClick={() => { setCategory('cafe'); setIsSearching(true); }}>Tìm Quán cà phê</button>
           </>
         )}
-        {/* Nút Focus Vị trí Hiện tại */}
+
         <button onClick={handleFocusCurrentLocation} style={{ marginTop: '10px' }}>Focus Vị trí Hiện tại</button>
       </div>
 
