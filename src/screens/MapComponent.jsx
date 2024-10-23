@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster';
+import 'leaflet-routing-machine';
 import { useEffect, useState } from 'react';
 
 const MapComponent = () => {
@@ -9,8 +10,9 @@ const MapComponent = () => {
   const [places, setPlaces] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [highlightedLocation, setHighlightedLocation] = useState(null);
+  const [currentPosition, setCurrentPosition] = useState(null);
+  const [routingControl, setRoutingControl] = useState(null);
 
-  // Icon definitions
   const hotelIcon = L.icon({
     iconUrl: 'https://image.flaticon.com/icons/png/128/149/149060.png',
     iconSize: [25, 41],
@@ -32,10 +34,10 @@ const MapComponent = () => {
       maxZoom: 19,
     }).addTo(mapInstance);
 
-    setMap(mapInstance); // Lưu lại map instance
+    setMap(mapInstance);
 
     return () => {
-      mapInstance.remove(); // Xóa bản đồ khi component bị hủy
+      mapInstance.remove();
     };
   }, []);
 
@@ -77,7 +79,7 @@ const MapComponent = () => {
     fetchPlaces();
 
     return () => {
-      markers.clearLayers(); // Xóa markers khi component bị hủy
+      markers.clearLayers();
     };
   }, [category, map]);
 
@@ -97,44 +99,55 @@ const MapComponent = () => {
     }
   };
 
+  // Hiển thị đường đi
   useEffect(() => {
-    if (highlightedLocation && map) {
-      const [lat, lon] = highlightedLocation;
-
-      if (map.highlightCircle) {
-        map.removeLayer(map.highlightCircle);
+    if (highlightedLocation && currentPosition && map) {
+      if (routingControl) {
+        map.removeControl(routingControl);
       }
 
-      const circle = L.circle([lat, lon], {
-        color: 'blue',
-        fillColor: '#30f',
-        fillOpacity: 0.5,
-        radius: 50,
-      });
+      const newRoutingControl = L.Routing.control({
+        waypoints: [
+          L.latLng(currentPosition.lat, currentPosition.lon),
+          L.latLng(highlightedLocation[0], highlightedLocation[1])
+        ],
+        lineOptions: {
+          styles: [
+            {
+              color: 'blue',  // Màu của đường đi
+              weight: 8,      // Độ rộng của đường đi
+              opacity: 0.7    // Độ trong suốt của đường
+            }
+          ]
+        },
+        createMarker: () => null,  // Ẩn các waypoint marker
+        show: false,  // Ẩn danh sách các hướng dẫn
+        addWaypoints: false,  // Không cho phép thêm waypoint
+      }).addTo(map);
 
-      circle.addTo(map);
-      map.highlightCircle = circle;
+      setRoutingControl(newRoutingControl);
     }
-  }, [highlightedLocation, map]);
+  }, [highlightedLocation, currentPosition, map]);
 
+  // Lấy vị trí hiện tại của người dùng
   const handleFocusCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
+          setCurrentPosition({ lat: latitude, lon: longitude });
+
           if (map) {
-            map.flyTo([latitude, longitude], 18); 
-          } else {
-            console.error("Map instance is not available.");
+            map.flyTo([latitude, longitude], 18);
           }
         },
         (error) => {
-          console.error("Error getting location:", error);
-          alert("Không thể lấy vị trí hiện tại của bạn.");
+          console.error('Error getting location:', error);
+          alert('Không thể lấy vị trí hiện tại của bạn.');
         }
       );
     } else {
-      alert("Trình duyệt của bạn không hỗ trợ geolocation.");
+      alert('Trình duyệt của bạn không hỗ trợ geolocation.');
     }
   };
 
