@@ -12,6 +12,7 @@ const MapComponent = () => {
   const [highlightedLocation, setHighlightedLocation] = useState(null);
   const [currentPosition, setCurrentPosition] = useState(null);
   const [routingControl, setRoutingControl] = useState(null);
+  const [placeDetails, setPlaceDetails] = useState(null); // Thêm state để lưu chi tiết
 
   const hotelIcon = L.icon({
     iconUrl: "https://image.flaticon.com/icons/png/128/149/149060.png",
@@ -93,10 +94,21 @@ const MapComponent = () => {
     };
   }, [category, map]);
 
-  const handlePlaceClick = (lat, lon) => {
+  const handlePlaceClick = async (lat, lon) => {
     if (map) {
       setHighlightedLocation([lat, lon]);
       map.flyTo([lat, lon], 18);
+
+      try {
+        // Gọi API để lấy chi tiết địa điểm
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+        );
+        const data = await response.json();
+        setPlaceDetails(data);
+      } catch (error) {
+        console.error("Error fetching place details:", error);
+      }
     }
   };
 
@@ -104,6 +116,7 @@ const MapComponent = () => {
     setPlaces([]);
     setIsSearching(false);
     setHighlightedLocation(null);
+    setPlaceDetails(null); // Xóa thông tin chi tiết khi tắt tìm kiếm
     if (map) {
       map.setView([21.028511, 105.804817], 13);
     }
@@ -133,14 +146,12 @@ const MapComponent = () => {
         createMarker: () => null,
         routeWhileDragging: false,
         addWaypoints: false,
-        show: true, // Để hiển thị bảng đường đi
+        show: true,
         showAlternatives: true,
         altLineOptions: {
           styles: [{ color: "green", weight: 6, opacity: 0.7 }],
         },
-        // Tuỳ chỉnh formatter để ẩn chỉ dẫn
         formatter: new L.Routing.Formatter({
-          // Sử dụng custom formatter để hiển thị tổng quát
           formatDistance: function (distance) {
             return distance > 1000
               ? (distance / 1000).toFixed(2) + " km"
@@ -154,7 +165,7 @@ const MapComponent = () => {
               : `${minutes} phút`;
           },
           formatInstruction: function () {
-            return ""; // Ẩn hoàn toàn hướng dẫn rẽ trái, rẽ phải
+            return "";
           },
         }),
         itineraryClassName: "custom-itinerary",
@@ -164,7 +175,6 @@ const MapComponent = () => {
     }
   }, [highlightedLocation, currentPosition, map]);
 
-  // Lấy vị trí hiện tại của người dùng
   const handleFocusCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -240,6 +250,28 @@ const MapComponent = () => {
           </>
         )}
 
+        {placeDetails && (
+          <div
+            style={{
+              marginTop: "20px",
+              padding: "10px",
+              backgroundColor: "#fff",
+              borderRadius: "5px",
+            }}
+          >
+            <h4>Thông tin chi tiết</h4>
+            <p>
+              <strong>Tên:</strong> {placeDetails.display_name}
+            </p>
+            <p>
+              <strong>Vĩ độ:</strong> {placeDetails.lat}
+            </p>
+            <p>
+              <strong>Kinh độ:</strong> {placeDetails.lon}
+            </p>
+          </div>
+        )}
+
         <button
           onClick={handleFocusCurrentLocation}
           style={{ marginTop: "10px" }}
@@ -257,47 +289,10 @@ const MapComponent = () => {
             border-radius: 8px;
           }
 
-          .leaflet-routing-alt {
-            background-color: white !important;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-          }
-
-          .leaflet-routing-alt:last-child {
-            border-bottom: none;
+          .leaflet-routing-container .leaflet-routing-alt {
+            background-color: #f7f7f7 !important;
           }
         `}
-      </style>
-      <style>
-        {`
-          .leaflet-routing-container {
-            background-color: white !important;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-          }
-
-          /* Ẩn tất cả chỉ dẫn đường đi chi tiết */
-          .leaflet-routing-alt .leaflet-routing-instructions {
-            display: none !important;
-          }
-
-          /* Hiển thị khoảng cách và thời gian */
-          .routing-summary {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-          }
-
-          .leaflet-routing-alt {
-            background-color: white !important;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-          }
-
-          .leaflet-routing-alt:last-child {
-            border-bottom: none;
-          }
-      `}
       </style>
     </div>
   );
