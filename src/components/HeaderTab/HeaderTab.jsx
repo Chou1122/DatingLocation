@@ -1,6 +1,6 @@
 import React from "react";
-import IconApp from "../../icons/IconApp";
 import "./Button.css";
+import { Logo } from "../Logo/Logo";
 
 export const HeaderTab = (props) => {
   const { onSignInPress } = props;
@@ -8,9 +8,7 @@ export const HeaderTab = (props) => {
   return (
     <div style={styles.container}>
       <div style={styles.logoWrapper}>
-        <div style={styles.logoContainer}>
-          <IconApp name="logo" height="40px" width="40px" />
-        </div>
+        <Logo />
         <p style={styles.textLogo}>CoupleSpot</p>
       </div>
 
@@ -39,6 +37,7 @@ const styles = {
     flexDirection: "row",
     display: "flex",
     alignItems: "center",
+    gap: "4px",
   },
   logoContainer: {
     width: "40px",

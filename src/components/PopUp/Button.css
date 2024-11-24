@@ -1,0 +1,73 @@
+.buttonCancel {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: #fff;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .buttonCancel:hover {
+    background-color: #28b285;
+  }
+  
+  .buttonCancel:active {
+    background-color: #1f8662;
+    transform: scale(0.95);
+  }
+
+  .forgotPassBtn {
+    border: none;
+    background-color: #fff;
+    padding: 0px;
+    cursor: pointer;
+  }
+
+  .signInBtn {
+    background-color: #000; /* Màu nền đen */
+    border: none; /* Không viền */
+    border-radius: 100px; /* Bo tròn */
+    padding: 18px 24px; /* Khoảng cách bên trong nút */
+    color: #fff; /* Màu chữ trắng */
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 80%;
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+  }
+  
+  .signInBtn:hover {
+    background-color: #333; /* Màu nền nhạt hơn khi hover */
+  }
+  
+  .signInBtn:active {
+    background-color: #444; /* Màu nền nhạt hơn khi nhấn */
+  }
+
+  .joinBtn {
+    border: none;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0);
+  }
+
+  .eyePassBtn {
+    border: none;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 4px;
+  }
