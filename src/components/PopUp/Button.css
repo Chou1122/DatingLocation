@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .buttonCancel {
     position: absolute;
     right: 12px;

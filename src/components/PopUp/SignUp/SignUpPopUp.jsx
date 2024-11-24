@@ -46,6 +46,18 @@ export const SignUpPopUp = (props) => {
           <p style={styles.textLabel}>Join to unlock the best of CoupleSpot!</p>
         </div>
 
+        <div style={styles.infoWrapper}>
+          <div style={styles.infoChildWrapper}>
+            <p style={styles.infoText}>First Name</p>
+            <input style={styles.inputInfo} />
+          </div>
+
+          <div style={styles.infoChildWrapper}>
+            <p style={styles.infoText}>Last Name</p>
+            <input style={styles.inputInfo} />
+          </div>
+        </div>
+
         <div style={styles.emailWrapper}>
           <div style={styles.emailLabel}>
             <p style={styles.emailLabelText}>Email address</p>
@@ -141,6 +153,46 @@ const styles = {
     width: "fit-content",
     boxShadow: "4px 4px 20px rgba(0, 0, 0, 0.4)",
   },
+
+  infoWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    gap: "8px",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
+    backgroundColor: "red",
+    boxSizing: "border-box",
+  },
+  infoChildWrapper: {
+    flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    padding: "0px",
+    maxWidth: "100%",
+    boxSizing: "border-box",
+    margin: "0px",
+  },
+  inputInfo: {
+    display: "flex",
+    // padding: "10px",
+    // fontSize: "16px",
+    borderRadius: "5px",
+    border: "2px solid #ccc",
+    outline: "none",
+    width: "100%",
+    maxWidth: "100%",
+    boxSizing: "border-box",
+  },
+
+  infoText: {
+    fontSize: "14px",
+    fontWeight: "500",
+    fontFamily: "Roboto, sans-serif",
+  },
+
   btnWrapper: {
     justifyContent: "flex-end",
     alignItems: "center",
