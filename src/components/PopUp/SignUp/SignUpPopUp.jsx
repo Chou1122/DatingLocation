@@ -6,12 +6,24 @@ import "../Button.css";
 export const SignUpPopUp = (props) => {
   const { onExitPress, onSignInPress } = props;
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
 
   const showPassOnPress = () => {
     setShowPass(!showPass);
+  };
+
+  const onFirstNameChange = (event) => {
+    const newFirstName = event.target.value;
+    setFirstName(newFirstName);
+  };
+
+  const onLastNameChange = (event) => {
+    const newLastName = event.target.value;
+    setLastName(newLastName);
   };
 
   const onEmailChange = (event) => {
@@ -49,12 +61,20 @@ export const SignUpPopUp = (props) => {
         <div style={styles.infoWrapper}>
           <div style={styles.infoChildWrapper}>
             <p style={styles.infoText}>First Name</p>
-            <input style={styles.inputInfo} />
+            <input
+              style={styles.inputInfo}
+              placeholder="First Name"
+              onChange={onFirstNameChange}
+            />
           </div>
 
           <div style={styles.infoChildWrapper}>
             <p style={styles.infoText}>Last Name</p>
-            <input style={styles.inputInfo} />
+            <input
+              style={styles.inputInfo}
+              placeholder="Last Name"
+              onChange={onLastNameChange}
+            />
           </div>
         </div>
 
@@ -150,7 +170,6 @@ const styles = {
     paddingRight: "48px",
     paddingTop: "32px",
     paddingBottom: "32px",
-    width: "fit-content",
     boxShadow: "4px 4px 20px rgba(0, 0, 0, 0.4)",
   },
 
@@ -162,7 +181,6 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: "20px",
-    backgroundColor: "red",
     boxSizing: "border-box",
   },
   infoChildWrapper: {
@@ -177,13 +195,12 @@ const styles = {
   },
   inputInfo: {
     display: "flex",
-    // padding: "10px",
-    // fontSize: "16px",
+    padding: "10px",
+    fontSize: "16px",
     borderRadius: "5px",
     border: "2px solid #ccc",
     outline: "none",
-    width: "100%",
-    maxWidth: "100%",
+    maxWidth: "186px",
     boxSizing: "border-box",
   },
 
